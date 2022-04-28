@@ -1,0 +1,15 @@
+function Transient = ImportTransientV3(filename)
+fileID = fopen(filename,'r');
+delimiter = ',';
+% startRow = 2;
+% FileTitle=textscan(fileID, '%[^\n\r]', startRow-1, 'WhiteSpace', '', 'ReturnOnError', false, 'EndOfLine', '\r\n');
+formatSpec=['%*q',repmat('%q',1,237)];
+Transient.TemFileHeader=textscan(fileID, formatSpec, 1, 'Delimiter', delimiter, 'WhiteSpace', '', 'ReturnOnError', false, 'HeaderLines', 2);
+formatSpec=['%*q%*q','%d'];
+NumberOfData =textscan(fileID, formatSpec, 1, 'Delimiter', delimiter, 'WhiteSpace', '', 'ReturnOnError', false, 'HeaderLines',5);
+formatSpec=['%*q','%q',repmat('%f',1,236)];
+Transient.TemDataArray=textscan(fileID, formatSpec,NumberOfData{1}, 'Delimiter', delimiter, 'WhiteSpace', '', 'ReturnOnError', false, 'HeaderLines',1);
+formatSpec=['%*q',repmat('%q',1,237)];
+Transient.LossFileHeader=textscan(fileID, formatSpec, 1, 'Delimiter', delimiter, 'WhiteSpace', '', 'ReturnOnError', false, 'HeaderLines', 4);
+formatSpec=['%*q','%q',repmat('%f',1,236)];
+Transient.LossDataArray=textscan(fileID, formatSpec,NumberOfData{1}, 'Delimiter', delimiter, 'WhiteSpace', '', 'ReturnOnError', false, 'HeaderLines',6);
